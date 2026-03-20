@@ -10,17 +10,25 @@ export const CartSlice = createSlice({
         const { name, image, cost } = action.payload; // Destructure product details from the action payload
         // Check if the item already exists in the cart by comparing names
         const existingItem = state.items.find(item => item.name === name);
-            if (existingItem) {
-            // If item already exists in the cart, increase its quantity
+        
+        if (existingItem) {
                 existingItem.quantity++;
-            } else {
-            // If item does not exist, add it to the cart with quantity 1
+            }else {
                 state.items.push({ name, image, cost, quantity: 1 });
             }
      },
+
     removeItem: (state, action) => {
-        state.items = state.items.filter(item => item.name !== action.payload);
+            const { name, quantity } = action.payload;
+            state.items = state.items.filter(item => item.name !== name);
+            state.numOfItems -= quantity;
+
+            // Just to be sure... I hate negative numbers
+            if (state.numOfItems < 0) {
+                state.numOfItems = 0;
+            }
     },
+
     updateQuantity: (state, action) => {
         const { name, quantity } = action.payload; // Destructure the product name and new quantity from the action payload
         // Find the item in the cart that matches the given name
