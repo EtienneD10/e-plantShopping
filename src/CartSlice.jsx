@@ -10,23 +10,18 @@ export const CartSlice = createSlice({
         const { name, image, cost } = action.payload; // Destructure product details from the action payload
         // Check if the item already exists in the cart by comparing names
         const existingItem = state.items.find(item => item.name === name);
-        
+
         if (existingItem) {
-                existingItem.quantity++;
-            }else {
-                state.items.push({ name, image, cost, quantity: 1 });
-            }
+            existingItem.quantity++;
+          } else {
+            state.items.push({ name, image, cost, quantity: 1 });
+          }
      },
 
     removeItem: (state, action) => {
-            const { name, quantity } = action.payload;
+            const { name } = action.payload;
             state.items = state.items.filter(item => item.name !== name);
-            state.numOfItems -= quantity;
-
-            // Just to be sure... I hate negative numbers
-            if (state.numOfItems < 0) {
-                state.numOfItems = 0;
-            }
+  
     },
 
     updateQuantity: (state, action) => {
